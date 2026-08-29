@@ -1,11 +1,35 @@
-from rag.pdf_loader import extract_text_from_pdf
-from rag.chunks import chunk_text
-from rag.embeddings import generate_embeddings
-pdf_path="../data/resume.pdf"
-text=extract_text_from_pdf(pdf_path)
-words=text.split()
-print(len(words))
-chunks=chunk_text(text)
-print("total chunks", len(chunks))
-embeddings=generate_embeddings(chunks)
-print(embeddings.shape)
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from services.interview_service import generate_interview_questions
+
+
+app = FastAPI()
+
+
+# Allow React frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.get("/")
+def root():
+    return {
+        "message": "AI Interview API is running"
+    }
+
+
+@app.get("/interview/questions")
+def get_interview_questions():
+
+    questions = generate_interview_questions()
+
+    return {
+        "success": True,
+        "questions": questions
+    }
