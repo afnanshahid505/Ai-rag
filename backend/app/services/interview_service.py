@@ -6,13 +6,13 @@ from rag.interview_topics import INTERVIEW_TOPICS
 from rag.llm import generate_questions
 
 
-def generate_interview_questions():
+def generate_interview_questions(pdf_path):
 
     # -----------------------------
     # 1. Extract resume text
     # -----------------------------
 
-    pdf_path = "../data/resume.pdf"
+    
 
     text = extract_layout_from_pdf(pdf_path)
 
